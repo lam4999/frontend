@@ -1,23 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import Register from './component/Register';
+import Login from './component/Login';
+import ChatBox from './component/Chat';
 
 function App() {
+  const [page, setPage] = useState(localStorage.getItem('token') ? 'chat' : 'login');
+
+  const handleLogin = () => setPage('chat');
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setPage('login');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ maxWidth: 400, margin: '40px auto', padding: 20, border: '1px solid #ddd', borderRadius: 8 }}>
+      {page === 'login' && <Login onLogin={handleLogin} onSwitch={() => setPage('register')} />}
+      {page === 'register' && <Register onSwitch={() => setPage('login')} />}
+      {page === 'chat' && <ChatBox onLogout={handleLogout} />}
     </div>
   );
 }
